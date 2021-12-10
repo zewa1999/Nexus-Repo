@@ -8,7 +8,7 @@ namespace NexusBenefit.DataLayer
 {
     public class NexusBenefitsContext : DbContext
     {
-        public DbSet<Benefit> Benefits { get; set; }
+        public DbSet<Benefit> Benefit { get; set; }
         public DbSet<Company> Company { get; set; }
         public DbSet<Role> Role { get; set; }
         public DbSet<Login> Login { get; set; }

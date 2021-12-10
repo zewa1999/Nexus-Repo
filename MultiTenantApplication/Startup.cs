@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Library.DataLayer.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MultiTenantApplication.DataLayer.Interfaces;
+using NexusBenefit.DataLayer;
 
 namespace MultiTenantApplication
 {
@@ -24,6 +27,11 @@ namespace MultiTenantApplication
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOrchardCore().AddMvc().WithTenants();
+            services.AddScoped<IBenefitRepository, BenefitRepository>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<ILoginRepository, LoginRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

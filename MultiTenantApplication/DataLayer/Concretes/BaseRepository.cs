@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Library.DataLayer.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace NexusBenefit.DataLayer
 {
-    public abstract class BaseRepository<T>
+    public abstract class BaseRepository<T> : IRepository<T>
          where T : class
     {
         /// <summary>

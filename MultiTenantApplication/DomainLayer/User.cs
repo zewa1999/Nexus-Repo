@@ -12,5 +12,7 @@ namespace NexusBenefit.DomainLayer
         public Company Company { get; set; }
         public string Function { get; set; }
         public Login Login { get; set; }
+        public Role Role { get; set; }
+        public Benefit Benefit { get; set; }
     }
 }
