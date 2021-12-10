@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NexusBenefit.DomainLayer
 {
-    public class Benefits
+    public class Benefit
     {
         public int Id { get; set; }
         public string Name { get; set; }
