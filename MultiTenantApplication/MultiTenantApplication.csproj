@@ -21,4 +21,11 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <None Update="Pages\Login\src\ball.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
