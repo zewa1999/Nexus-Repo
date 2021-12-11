@@ -10,9 +10,8 @@ namespace NexusBenefit.DomainLayer
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public Company Company { get; set; }
-        public string Function { get; set; }
         public Login Login { get; set; }
         public Role Role { get; set; }
-        public Benefit Benefit { get; set; }
+        public virtual ICollection<Benefit> Benefits { get; set; }
     }
 }

@@ -1,26 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace NexusBenefits.DataLayer.Migrations
+namespace MultiTenantApplication.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialMigrate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Benefits",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Cost = table.Column<double>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Benefits", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Company",
                 columns: table => new
@@ -43,7 +28,7 @@ namespace NexusBenefits.DataLayer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -73,8 +58,8 @@ namespace NexusBenefits.DataLayer.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CompanyId = table.Column<int>(type: "int", nullable: true),
-                    Function = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LoginId = table.Column<int>(type: "int", nullable: true)
+                    LoginId = table.Column<int>(type: "int", nullable: true),
+                    RoleId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -91,7 +76,40 @@ namespace NexusBenefits.DataLayer.Migrations
                         principalTable: "Login",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_User_Role_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Role",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Benefit",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Cost = table.Column<double>(type: "float", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Benefit", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Benefit_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Benefit_UserId",
+                table: "Benefit",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_CompanyId",
@@ -102,15 +120,17 @@ namespace NexusBenefits.DataLayer.Migrations
                 name: "IX_User_LoginId",
                 table: "User",
                 column: "LoginId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_RoleId",
+                table: "User",
+                column: "RoleId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Benefits");
-
-            migrationBuilder.DropTable(
-                name: "Role");
+                name: "Benefit");
 
             migrationBuilder.DropTable(
                 name: "User");
@@ -120,6 +140,9 @@ namespace NexusBenefits.DataLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Login");
+
+            migrationBuilder.DropTable(
+                name: "Role");
         }
     }
 }

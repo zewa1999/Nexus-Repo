@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NexusBenefit.DataLayer;
 
-namespace NexusBenefits.DataLayer.Migrations
+namespace MultiTenantApplication.Migrations
 {
     [DbContext(typeof(NexusBenefitsContext))]
-    [Migration("20211210182651_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20211211080113_InitialMigrate")]
+    partial class InitialMigrate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,9 +37,14 @@ namespace NexusBenefits.DataLayer.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Benefits");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Benefit");
                 });
 
             modelBuilder.Entity("NexusBenefit.DomainLayer.Company", b =>
@@ -73,10 +78,10 @@ namespace NexusBenefits.DataLayer.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("Password")
+                    b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("email")
+                    b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -112,13 +117,13 @@ namespace NexusBenefits.DataLayer.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Function")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("LoginId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -127,7 +132,16 @@ namespace NexusBenefits.DataLayer.Migrations
 
                     b.HasIndex("LoginId");
 
+                    b.HasIndex("RoleId");
+
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("NexusBenefit.DomainLayer.Benefit", b =>
+                {
+                    b.HasOne("NexusBenefit.DomainLayer.User", null)
+                        .WithMany("Benefits")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("NexusBenefit.DomainLayer.User", b =>
@@ -140,9 +154,20 @@ namespace NexusBenefits.DataLayer.Migrations
                         .WithMany()
                         .HasForeignKey("LoginId");
 
+                    b.HasOne("NexusBenefit.DomainLayer.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId");
+
                     b.Navigation("Company");
 
                     b.Navigation("Login");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("NexusBenefit.DomainLayer.User", b =>
+                {
+                    b.Navigation("Benefits");
                 });
 #pragma warning restore 612, 618
         }

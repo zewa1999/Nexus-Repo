@@ -4,6 +4,7 @@ using MultiTenantApplication.DataLayer.Interfaces;
 using NexusBenefit.DataLayer;
 using NexusBenefit.DomainLayer;
 using System;
+using System.Collections.Generic;
 
 namespace MultiTenantApplication.Controllers
 {
@@ -23,17 +24,16 @@ namespace MultiTenantApplication.Controllers
         }
 
         [HttpPost]
-        public void Add(string lastName, string firstName, Company c, string f, Login log, Role role, Benefit b)
+        public void Add(string lastName, string firstName, Company c, string f, Login log, Role role, ICollection<Benefit> b)
         {
             var user = new User
             {
                 LastName = lastName,
                 FirstName = firstName,
                 Company = c,
-                Function = f,
                 Role = role,
                 Login = log,
-                Benefit = b
+                Benefits = b
             };
             try
             {
